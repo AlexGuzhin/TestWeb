@@ -33,6 +33,51 @@ public class AppOrderNegativeTest {
         driver = null;
     }
 
+    @Test
+    public void shouldBeFoiledIncorrectNameInput() {
+        driver.findElement(By.xpath("//span[data-test-id='name']//input")).sendKeys("Gleb");
+        driver.findElement(By.xpath("//span[data-test-id='phone']//input")).sendKeys("+78005553535");
+        driver.findElement(By.xpath("//label[data-test-id='agreement']")).click();
+        driver.findElement(By.xpath("//button[conteins(@class,'button')]")).click();
+        assertEquals("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.",
+                driver.findElement(By.xpath("//span[@data-test-id='name'][contains(@class,'input_invalid')]//span[@class='input__sub']"))
+                        .getText().trim());
+    }
+    @Test
+    public void shouldBeFailedEmptyNameInput() {
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+78005553535");
+        driver.findElement(By.cssSelector("[data-test-id='agreement']")).click();
+        driver.findElement(By.cssSelector("button.button")).click();
 
+        assertEquals("Поле обязательно для заполнения",
+                driver.findElement(By.cssSelector("[data-test-id=name].input_invalid .input__sub")).getText().trim());
+        assertTrue(driver.findElement(By.cssSelector("[data-test-id=name].input_invalid .input__sub")).isDisplayed());
+    }
+
+    @Test
+    public void shouldBeFailedIncorrectPhoneInput() {
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Иваныч-Ивановичев Иван");
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("Gleb");
+        driver.findElement(By.cssSelector("[data-test-id='agreement']")).click();
+        driver.findElement(By.cssSelector("button.button")).click();
+        assertEquals("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678",
+                driver.findElement(By.cssSelector("[@data-test-id=phone].input_invalid .input__sub")).getText().trim());
+    }
+
+    @Test
+    public void shouldBeFailedEmptyPhoneInput() {
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Иваныч-Ивановичев Иван");
+        driver.findElement(By.cssSelector("[data-test-id='agreement']")).click();
+        driver.findElement(By.cssSelector("button.button")).click();
+        assertEquals("Поле обязательно для заполнения",
+                driver.findElement(By.cssSelector("[@data-test-id=phone].input_invalid .input__sub")).getText().trim());
+    }
+    @Test
+    public void shouldBeFailedUncheckedCheckbox() {
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Иваныч-Ивановичев Иван");
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+78005553535");
+        driver.findElement(By.cssSelector("button.button")).click();
+        assertTrue(driver.findElement(By.cssSelector("[data-test-id=agreement].input_invalid")).isDisplayed());
+    }
 
 }
