@@ -18,8 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class AppOrderPositiveTest {
     private WebDriver driver;
 
-    @BeforeAll
-    public static void setupAll() {
+     @BeforeAll
+     public static void setupAll() {
         WebDriverManager.chromedriver().setup();
     }
 
